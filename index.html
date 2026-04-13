@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qora Quti — Kitob</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Merriweather', serif;
+      background: #fff;
+      color: #111;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── SUBTLE GRID BG ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(0,0,0,0.028) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,0,0,0.028) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body > * { position: relative; z-index: 1; }
+
+    /* ── NAV ── */
+    nav {
+      padding: 2rem 0;
+      border-bottom: 1px solid #e5e5e5;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand { font-size: 15px; font-weight: 700; letter-spacing: 0.04em; }
+
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+
+    .nav-price { font-size: 13px; font-weight: 300; color: #666; }
+
+    .nav-btn {
+      font-family: 'Merriweather', serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      padding: 9px 20px;
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 3px 12px rgba(34,197,94,0.3);
+    }
+
+    .nav-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 7rem 0 5rem;
+      position: relative;
+    }
+
+    .hero-deco-letter {
+      position: absolute;
+      top: 2rem;
+      right: -1rem;
+      font-size: clamp(12rem, 20vw, 20rem);
+      font-weight: 700;
+      line-height: 1;
+      color: rgba(0,0,0,0.03);
+      letter-spacing: -0.05em;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-label::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      background: #ccc;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 5vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-desc {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.9;
+      color: #555;
+      margin-bottom: 2.5rem;
+      max-width: 380px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2.5rem;
+      border: 1px solid #e5e5e5;
+      width: fit-content;
+    }
+
+    .meta-item {
+      padding: 14px 24px;
+      border-right: 1px solid #e5e5e5;
+    }
+
+    .meta-item:last-child { border-right: none; }
+
+    .meta-num { font-size: 20px; font-weight: 700; color: #111; }
+    .meta-lbl {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-top: 3px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .price { font-size: 2rem; font-weight: 700; letter-spacing: -0.01em; }
+
+    .delivery {
+      font-size: 12px;
+      font-weight: 300;
+      color: #888;
+      line-height: 1.6;
+      padding-bottom: 4px;
+    }
+
+    .btn-order {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+      color: #fff;
+      font-family: 'Merriweather', serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      padding: 16px 40px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(34,197,94,0.28);
+    }
+
+    .btn-order:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(34,197,94,0.4);
+    }
+
+    /* ── BOOK IMAGE ── */
+    .book-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .book-wrap::before,
+    .book-wrap::after {
+      content: '';
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border-color: #ddd;
+      border-style: solid;
+    }
+
+    .book-wrap::before {
+      top: -14px; left: 14px;
+      border-width: 1px 0 0 1px;
+    }
+
+    .book-wrap::after {
+      bottom: -14px; right: 14px;
+      border-width: 0 1px 1px 0;
+    }
+
+    .book-img {
+      width: 100%;
+      max-width: 320px;
+      display: block;
+      box-shadow: 28px 36px 70px rgba(0,0,0,0.16), 4px 6px 18px rgba(0,0,0,0.08);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── DIVIDER ── */
+    .divider { border: none; border-top: 1px solid #e5e5e5; margin: 0; }
+
+    /* ── FOR WHOM ── */
+    .forwho { padding: 5rem 0; }
+
+    .section-heading {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-heading::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      background: #ccc;
+    }
+
+    .audience-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid #e5e5e5;
+    }
+
+    .audience-item {
+      padding: 2.25rem 1.75rem;
+      border-right: 1px solid #e5e5e5;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+
+    .audience-item:hover { background: #fafafa; }
+    .audience-item:last-child { border-right: none; }
+
+    .audience-item::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #22c55e, #15803d);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .audience-item:hover::after { transform: scaleX(1); }
+
+    .audience-num {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: #bbb;
+      margin-bottom: 12px;
+    }
+
+    .audience-title { font-size: 14px; font-weight: 700; line-height: 1.4; }
+
+    /* ── PROBLEMS ── */
+    .problems {
+      padding: 5rem 0;
+      background: #f8f8f8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .problems::after {
+      content: '';
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.05);
+      right: -180px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .problems::before {
+      content: '';
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.04);
+      right: -80px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .problems .container {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .problems-big {
+      font-size: clamp(5rem, 10vw, 9rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #111;
+    }
+
+    .problems-sub {
+      font-size: 13px;
+      font-weight: 300;
+      color: #888;
+      line-height: 1.7;
+      margin-top: 0.75rem;
+    }
+
+    .problem-list { list-style: none; }
+
+    .problem-item {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid #e5e5e5;
+      transition: padding-left 0.2s;
+    }
+
+    .problem-item:hover { padding-left: 6px; }
+    .problem-item:first-child { border-top: 1px solid #e5e5e5; }
+
+    .problem-idx { font-size: 10px; font-weight: 300; color: #bbb; min-width: 20px; }
+    .problem-text { font-size: 13px; font-weight: 300; color: #444; line-height: 1.6; }
+
+    /* ── CTA ── */
+    .cta {
+      padding: 7rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.065) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    .cta .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-title {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .cta-title em { font-style: italic; font-weight: 300; }
+
+    .cta-note { font-size: 13px; font-weight: 300; color: #777; line-height: 1.8; }
+
+    .cta-right {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    .cta-right::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #22c55e, #15803d);
+    }
+
+    .cta-price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-delivery {
+      font-size: 12px;
+      font-weight: 300;
+      color: #888;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .btn-order-big {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+      color: #fff;
+      font-family: 'Merriweather', serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      padding: 18px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(34,197,94,0.28);
+    }
+
+    .btn-order-big:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(34,197,94,0.4);
+    }
+
+    .cta-guarantee {
+      font-size: 11px;
+      font-weight: 300;
+      color: #aaa;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid #e5e5e5; padding: 2rem 0; background: #fff; }
+
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .footer-brand { font-size: 13px; font-weight: 700; }
+    .footer-copy { font-size: 11px; font-weight: 300; color: #aaa; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero .container { grid-template-columns: 1fr; gap: 3rem; }
+      .hero { padding: 3.5rem 0 3rem; }
+      .hero-deco-letter { font-size: 9rem; top: 1rem; right: -0.5rem; }
+      .book-wrap { order: -1; }
+      .book-img { max-width: 200px; }
+      .audience-list { grid-template-columns: 1fr; }
+      .audience-item { border-right: none; border-bottom: 1px solid #e5e5e5; }
+      .audience-item:last-child { border-bottom: none; }
+      .problems .container { grid-template-columns: 1fr; gap: 2rem; }
+      .cta .container { grid-template-columns: 1fr; gap: 2.5rem; }
+      .nav-btn { display: none; }
+    }
+
+    /* ── FADE IN ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-text > * { animation: fadeUp 0.65s both; }
+    .hero-text > *:nth-child(1) { animation-delay: 0.05s; }
+    .hero-text > *:nth-child(2) { animation-delay: 0.13s; }
+    .hero-text > *:nth-child(3) { animation-delay: 0.21s; }
+    .hero-text > *:nth-child(4) { animation-delay: 0.29s; }
+    .hero-text > *:nth-child(5) { animation-delay: 0.37s; }
+    .hero-text > *:nth-child(6) { animation-delay: 0.45s; }
+    .book-wrap { animation: fadeUp 0.8s 0.25s both; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <div class="nav-brand">Qora Quti</div>
+    <div class="nav-right">
+      <div class="nav-price">240 000 so'm</div>
+      <a href="https://t.me/m/7em5CmoqYjVi" target="_blank" class="nav-btn">Buyurtma →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-deco-letter">QQ</div>
+  <div class="container">
+    <div class="hero-text">
+      <div class="hero-label">Nazariy qo'llanma · 2024</div>
+      <h1 class="hero-title">Qora<br>Quti</h1>
+      <p class="hero-desc">
+        Xodimlarni boshqarishda duch keladigan <strong>44 ta muammoga</strong> aniq yechim. Biznes egalari, bo'lim rahbarlari va menejerlar uchun yozilgan amaliy qo'llanma.
+      </p>
+      <div class="hero-meta">
+        <div class="meta-item">
+          <div class="meta-num">44</div>
+          <div class="meta-lbl">Muammo & yechim</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-num">250+</div>
+          <div class="meta-lbl">Bet</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price">240 000 so'm</div>
+        <div class="delivery">O'zbekiston bo'yicha<br>BTS pochta orqali</div>
+      </div>
+      <a href="https://t.me/m/7em5CmoqYjVi" target="_blank" class="btn-order">Buyurtma berish →</a>
+    </div>
+
+    <div class="book-wrap">
+      <img class="book-img" src="https://i.postimg.cc/CKvfs6Nx/Untitled-design-15.webp" alt="Qora Quti kitob muqovasi" />
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- FOR WHOM -->
+<section class="forwho">
+  <div class="container">
+    <div class="section-heading">Kim uchun</div>
+    <div class="audience-list">
+      <div class="audience-item">
+        <div class="audience-num">01</div>
+        <div class="audience-title">Biznes egalari</div>
+      </div>
+      <div class="audience-item">
+        <div class="audience-num">02</div>
+        <div class="audience-title">Bo'lim rahbarlari</div>
+      </div>
+      <div class="audience-item">
+        <div class="audience-num">03</div>
+        <div class="audience-title">Menejerlar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- PROBLEMS -->
+<section class="problems">
+  <div class="container">
+    <div class="problems-left">
+      <div class="problems-big">44</div>
+      <div class="problems-sub">xodimlarni boshqarishdagi muammoga aniq, amaliy yechim</div>
+    </div>
+    <div class="problems-right">
+      <ul class="problem-list">
+        <li class="problem-item"><span class="problem-idx">01</span><span class="problem-text">Xodim motivatsiyasi pasayib ketganda nima qilish kerak?</span></li>
+        <li class="problem-item"><span class="problem-idx">02</span><span class="problem-text">Jamoada konflikt yuzaga kelganda qanday harakat qilish lozim?</span></li>
+        <li class="problem-item"><span class="problem-idx">03</span><span class="problem-text">Samarasiz xodimni qanday baholash va yo'naltirish mumkin?</span></li>
+        <li class="problem-item"><span class="problem-idx">04</span><span class="problem-text">Yangi xodimni jamoaga qanday qilib tez moslashtirib olish kerak?</span></li>
+        <li class="problem-item"><span class="problem-idx">05</span><span class="problem-text">Delegatsiya: vazifani topshirgandan so'ng nazorat qanday bo'lishi kerak?</span></li>
+        <li class="problem-item"><span class="problem-idx">···</span><span class="problem-text">Va yana 39 ta muammo uchun aniq yechimlar</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-left">
+      <h2 class="cta-title">Rahbar uchun<br><em>eng zarur</em><br>qo'llanma</h2>
+      <p class="cta-note">
+        O'zbekiston bo'yicha BTS pochta orqali yetkazib beriladi.<br>
+        Buyurtma berganingizdan so'ng siz bilan bog'lanamiz.
+      </p>
+    </div>
+    <div class="cta-right">
+      <div class="cta-price">240 000 so'm</div>
+      <div class="cta-delivery">
+        Yetkazib berish: O'zbekiston bo'yicha<br>
+        BTS pochta orqali
+      </div>
+      <a href="https://t.me/m/7em5CmoqYjVi" target="_blank" class="btn-order-big">Buyurtma berish →</a>
+      <div class="cta-guarantee">Telegram orqali buyurtma qabul qilinadi</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">Qora Quti</div>
+    <div class="footer-copy">© 2026 · Barcha huquqlar himoyalangan</div>
+  </div>
+</footer>
+
+</body>
+</html>
